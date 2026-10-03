@@ -9,4 +9,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
   )
 }
 
-export const supabase = createClient(supabaseUrl ?? '', supabaseAnonKey ?? '')
+export const supabase = createClient(supabaseUrl ?? '', supabaseAnonKey ?? '', {
+  auth: {
+    // Mantém a sessão no localStorage e renova o token sozinho.
+    persistSession: true,
+    autoRefreshToken: true,
+    // Troca o código do link mágico por sessão ao carregar /auth/callback.
+    detectSessionInUrl: true,
+    flowType: 'pkce',
+  },
+})

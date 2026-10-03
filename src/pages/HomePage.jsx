@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import UserMenu from '../components/auth/UserMenu'
 import Button from '../components/ui/Button'
 import { fetchGames } from '../hooks/useGameActions'
 
@@ -17,7 +18,11 @@ export default function HomePage() {
 
   return (
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 p-6">
-      <div className="mt-12 text-center">
+      <header className="flex justify-end">
+        <UserMenu />
+      </header>
+
+      <div className="text-center">
         <h1 className="text-4xl font-bold text-foreground md:text-5xl">
           Scoreboard
         </h1>
