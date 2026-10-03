@@ -16,6 +16,8 @@
  * @property {GameStatus} status
  * @property {string} home_team_name
  * @property {string} away_team_name
+ * @property {string} home_team_color
+ * @property {string} away_team_color
  * @property {number} home_score
  * @property {number} away_score
  * @property {number} home_fouls

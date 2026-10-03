@@ -9,6 +9,7 @@ import FinishGameModal from '../components/control/FinishGameModal'
 import FoulControls from '../components/control/FoulControls'
 import PeriodControls from '../components/control/PeriodControls'
 import ScoreButtons from '../components/control/ScoreButtons'
+import TeamColorControls from '../components/control/TeamColorControls'
 import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../hooks/useToast'
 import { useGame } from '../hooks/useGame'
@@ -148,6 +149,12 @@ export default function ControlPage() {
             controlToken={token}
             currentFouls={game.home_fouls}
           />
+          <TeamColorControls
+            gameId={game.id}
+            team="home"
+            controlToken={token}
+            game={game}
+          />
         </section>
 
         <section className="flex flex-col justify-center gap-4">
@@ -182,6 +189,12 @@ export default function ControlPage() {
             team="away"
             controlToken={token}
             currentFouls={game.away_fouls}
+          />
+          <TeamColorControls
+            gameId={game.id}
+            team="away"
+            controlToken={token}
+            game={game}
           />
         </section>
       </main>

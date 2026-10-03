@@ -13,6 +13,7 @@ export default function ScoreboardLayout({ game }) {
           score={game.home_score}
           fouls={game.home_fouls}
           variant="home"
+          color={game.home_team_color}
         />
       </div>
       <div className="flex-[38]">
@@ -21,6 +22,7 @@ export default function ScoreboardLayout({ game }) {
           score={game.away_score}
           fouls={game.away_fouls}
           variant="away"
+          color={game.away_team_color}
         />
       </div>
       <div className="flex-[24]">

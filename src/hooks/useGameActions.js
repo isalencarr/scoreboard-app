@@ -4,6 +4,8 @@ import { supabase } from '../lib/supabase'
  * @typedef {Object} CreateGameInput
  * @property {string} homeTeamName
  * @property {string} awayTeamName
+ * @property {string} [homeTeamColor] hex #rrggbb
+ * @property {string} [awayTeamColor] hex #rrggbb
  * @property {number} periodDurationMinutes
  * @property {number} overtimeDurationMinutes
  * @property {number} totalPeriods
@@ -30,6 +32,8 @@ export async function createGame(input) {
       user_id: session.user.id,
       home_team_name: input.homeTeamName,
       away_team_name: input.awayTeamName,
+      home_team_color: input.homeTeamColor,
+      away_team_color: input.awayTeamColor,
       period_duration_seconds: input.periodDurationMinutes * 60,
       overtime_duration_seconds: input.overtimeDurationMinutes * 60,
       total_periods: input.totalPeriods,

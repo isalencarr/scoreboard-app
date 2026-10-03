@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '../hooks/useToast'
 import Button from '../components/ui/Button'
+import ColorPicker from '../components/ui/ColorPicker'
 import Input from '../components/ui/Input'
 import { createGame } from '../hooks/useGameActions'
 
@@ -12,6 +13,8 @@ export default function CreateGamePage() {
   const [form, setForm] = useState({
     homeTeamName: 'Casa',
     awayTeamName: 'Visitante',
+    homeTeamColor: '#dc2626',
+    awayTeamColor: '#18181b',
     periodDuration: 10,
     overtimeDuration: 5,
     totalPeriods: 4,
@@ -25,6 +28,8 @@ export default function CreateGamePage() {
       const { id, controlToken } = await createGame({
         homeTeamName: form.homeTeamName,
         awayTeamName: form.awayTeamName,
+        homeTeamColor: form.homeTeamColor,
+        awayTeamColor: form.awayTeamColor,
         periodDurationMinutes: Number(form.periodDuration),
         overtimeDurationMinutes: Number(form.overtimeDuration),
         totalPeriods: Number(form.totalPeriods),
@@ -53,6 +58,14 @@ export default function CreateGamePage() {
             }
           />
         </div>
+        <ColorPicker
+          label="Cor do time da casa"
+          value={form.homeTeamColor}
+          previewText={form.homeTeamName || 'Casa'}
+          onChange={(hex) =>
+            setForm((prev) => ({ ...prev, homeTeamColor: hex }))
+          }
+        />
         <div>
           <label className="mb-2 block text-sm text-foreground-muted">
             Time visitante
@@ -64,6 +77,14 @@ export default function CreateGamePage() {
             }
           />
         </div>
+        <ColorPicker
+          label="Cor do time visitante"
+          value={form.awayTeamColor}
+          previewText={form.awayTeamName || 'Visitante'}
+          onChange={(hex) =>
+            setForm((prev) => ({ ...prev, awayTeamColor: hex }))
+          }
+        />
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="mb-2 block text-sm text-foreground-muted">
