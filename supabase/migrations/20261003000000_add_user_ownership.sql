@@ -270,8 +270,14 @@ END;
 $$;
 
 -- O operador pode não ter conta, então anon também executa.
--- can_control_game não é exposta: só roda dentro das funções acima.
-REVOKE ALL ON FUNCTION can_control_game(uuid, uuid) FROM PUBLIC;
+--
+-- can_control_game não é exposta: só roda dentro das funções acima, que são
+-- SECURITY DEFINER e portanto a executam como dono. O REVOKE precisa citar
+-- anon e authenticated explicitamente: o Supabase concede EXECUTE a esses
+-- papéis por default privileges, e revogar de PUBLIC não desfaz isso —
+-- caso contrário sobra um oráculo anônimo para testar control_tokens.
+REVOKE ALL ON FUNCTION can_control_game(uuid, uuid)
+  FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION update_game_with_token(uuid, uuid, jsonb) FROM PUBLIC;
 REVOKE ALL ON FUNCTION add_game_event_with_token(uuid, uuid, game_event_type, team_side, integer, jsonb) FROM PUBLIC;
 REVOKE ALL ON FUNCTION finish_game_with_token(uuid, uuid) FROM PUBLIC;
