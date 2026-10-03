@@ -1,20 +1,10 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import UserMenu from '../components/auth/UserMenu'
 import Button from '../components/ui/Button'
-import { fetchGames } from '../hooks/useGameActions'
+import { useMyGames } from '../hooks/useMyGames'
 
 export default function HomePage() {
-  const [games, setGames] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    fetchGames()
-      .then(setGames)
-      .catch(setError)
-      .finally(() => setLoading(false))
-  }, [])
+  const { games, loading, error, signedIn, initializing } = useMyGames()
 
   return (
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 p-6">
@@ -43,18 +33,25 @@ export default function HomePage() {
 
       <div>
         <h2 className="mb-4 text-xl font-semibold text-foreground">
-          Jogos recentes
+          Meus jogos
         </h2>
+
+        {!initializing && !signedIn && (
+          <p className="text-foreground-muted">
+            <Link to="/login" className="text-accent hover:text-accent-hover">
+              Entre
+            </Link>{' '}
+            para ver e controlar seus jogos.
+          </p>
+        )}
 
         {loading && <p className="text-foreground-muted">Carregando...</p>}
 
         {error && (
-          <p className="text-danger">
-            Erro ao carregar jogos: {error.message}
-          </p>
+          <p className="text-danger">Erro ao carregar jogos: {error.message}</p>
         )}
 
-        {!loading && games.length === 0 && (
+        {signedIn && !loading && !error && games.length === 0 && (
           <p className="text-foreground-muted">Nenhum jogo criado ainda.</p>
         )}
 

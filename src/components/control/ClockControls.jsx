@@ -25,7 +25,7 @@ export default function ClockControls({ gameId, controlToken, game }) {
         clock_running: true,
         clock_updated_at: new Date().toISOString(),
       })
-      await addGameEvent(gameId, { type: 'clock_start' })
+      await addGameEvent(gameId, controlToken, { type: 'clock_start' })
     } catch (err) {
             console.error('Erro ao iniciar cronômetro:', err)
       addToast('Erro ao iniciar cronômetro. Verifique o token de controle.')
@@ -47,7 +47,7 @@ export default function ClockControls({ gameId, controlToken, game }) {
         clock_running: false,
         clock_seconds: Math.round(remaining),
       })
-      await addGameEvent(gameId, { type: 'clock_stop' })
+      await addGameEvent(gameId, controlToken, { type: 'clock_stop' })
     } catch (err) {
       console.error('Erro ao pausar cronômetro:', err)
       addToast('Erro ao pausar cronômetro. Verifique o token de controle.')
@@ -67,7 +67,7 @@ export default function ClockControls({ gameId, controlToken, game }) {
         clock_running: false,
         clock_seconds: baseSeconds,
       })
-      await addGameEvent(gameId, { type: 'clock_reset' })
+      await addGameEvent(gameId, controlToken, { type: 'clock_reset' })
     } catch (err) {
       console.error('Erro ao zerar cronômetro:', err)
       addToast('Erro ao zerar cronômetro. Verifique o token de controle.')

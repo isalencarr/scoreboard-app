@@ -28,12 +28,19 @@
  * @property {number} period_duration_seconds
  * @property {number} overtime_duration_seconds
  * @property {number} total_periods
- * @property {string} control_token
+ * @property {string | null} user_id
  * @property {number} [final_home_score]
  * @property {number} [final_away_score]
  * @property {string} [finished_at]
  * @property {string} created_at
  * @property {string} updated_at
+ */
+
+/**
+ * @typedef {Object} GameControlToken
+ * @property {string} game_id
+ * @property {string} token
+ * @property {string} created_at
  */
 
 /**

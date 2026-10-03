@@ -27,7 +27,7 @@ export default function PeriodControls({ gameId, controlToken, game }) {
         period: newPeriod,
         is_overtime: isNowOvertime,
       })
-      await addGameEvent(gameId, {
+      await addGameEvent(gameId, controlToken, {
         type: 'period_change',
         value: newPeriod,
         payload: { direction: 'previous' },
@@ -50,7 +50,7 @@ export default function PeriodControls({ gameId, controlToken, game }) {
         period: newPeriod,
         is_overtime: isNowOvertime,
       })
-      await addGameEvent(gameId, {
+      await addGameEvent(gameId, controlToken, {
         type: 'period_change',
         value: newPeriod,
         payload: { direction: 'next' },
@@ -75,7 +75,7 @@ export default function PeriodControls({ gameId, controlToken, game }) {
         clock_seconds: game.overtime_duration_seconds,
         clock_running: false,
       })
-      await addGameEvent(gameId, {
+      await addGameEvent(gameId, controlToken, {
         type: 'overtime_start',
         value: overtimePeriod,
       })

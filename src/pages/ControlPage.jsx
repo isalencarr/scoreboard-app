@@ -1,5 +1,5 @@
 import { ExternalLink, QrCode } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import ClockAdjust from '../components/control/ClockAdjust'
 import ClockControls from '../components/control/ClockControls'
@@ -9,9 +9,10 @@ import FinishGameModal from '../components/control/FinishGameModal'
 import FoulControls from '../components/control/FoulControls'
 import PeriodControls from '../components/control/PeriodControls'
 import ScoreButtons from '../components/control/ScoreButtons'
+import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../hooks/useToast'
 import { useGame } from '../hooks/useGame'
-import { finishGame } from '../hooks/useGameActions'
+import { fetchGameControlToken, finishGame } from '../hooks/useGameActions'
 
 export default function ControlPage() {
   const { id } = useParams()
@@ -19,11 +20,41 @@ export default function ControlPage() {
   const [showFinishModal, setShowFinishModal] = useState(false)
   const [showQRModal, setShowQRModal] = useState(false)
   const [finishing, setFinishing] = useState(false)
+  const [ownerToken, setOwnerToken] = useState(null)
   const { addToast } = useToast()
-  const token = searchParams.get('token')
-  const controlUrl = typeof window !== 'undefined' ? window.location.href : ''
+  const { user } = useAuth()
 
   const { game, loading, error, realtimeStatus } = useGame(id)
+
+  const urlToken = searchParams.get('token')
+  const isOwner = !!user && !!game && game.user_id === user.id
+
+  // O dono chega pela área administrativa sem token na URL: busca o dele.
+  useEffect(() => {
+    if (urlToken || !isOwner || !id) return
+
+    let isCancelled = false
+
+    fetchGameControlToken(id)
+      .then((value) => {
+        if (!isCancelled) setOwnerToken(value)
+      })
+      .catch((err) => {
+        console.error('Erro ao buscar token de controle:', err)
+      })
+
+    return () => {
+      isCancelled = true
+    }
+  }, [urlToken, isOwner, id])
+
+  const token = urlToken ?? ownerToken
+  const controlUrl =
+    typeof window === 'undefined'
+      ? ''
+      : token
+        ? `${window.location.origin}/scoreboard/${id}/control?token=${token}`
+        : window.location.href
 
   async function handleFinishGame() {
     if (!token || !id) return
@@ -167,7 +198,7 @@ export default function ControlPage() {
         url={controlUrl}
       />
 
-      {!token && (
+      {!token && !isOwner && (
         <div className="absolute right-4 top-14 rounded bg-danger/20 px-3 py-1 text-sm text-danger">
           Modo visualização — token não encontrado
         </div>

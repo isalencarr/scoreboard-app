@@ -1,19 +1,11 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Button from '../components/ui/Button'
-import { fetchFinishedGames } from '../hooks/useGameActions'
+import { useMyGames } from '../hooks/useMyGames'
 
 export default function HistoryPage() {
-  const [games, setGames] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    fetchFinishedGames()
-      .then(setGames)
-      .catch(setError)
-      .finally(() => setLoading(false))
-  }, [])
+  const { games, loading, error, signedIn, initializing } = useMyGames({
+    finishedOnly: true,
+  })
 
   return (
     <div className="mx-auto min-h-screen max-w-2xl p-6">
@@ -24,6 +16,18 @@ export default function HistoryPage() {
         </Link>
       </div>
 
+      {!initializing && !signedIn && (
+        <p className="text-foreground-muted">
+          <Link
+            to="/login?next=%2Fhistory"
+            className="text-accent hover:text-accent-hover"
+          >
+            Entre
+          </Link>{' '}
+          para ver seu histórico de jogos.
+        </p>
+      )}
+
       {loading && <p className="text-foreground-muted">Carregando...</p>}
 
       {error && (
@@ -32,7 +36,7 @@ export default function HistoryPage() {
         </p>
       )}
 
-      {!loading && games.length === 0 && (
+      {signedIn && !loading && !error && games.length === 0 && (
         <p className="text-foreground-muted">Nenhum jogo finalizado ainda.</p>
       )}
 

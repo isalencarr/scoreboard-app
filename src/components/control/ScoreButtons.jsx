@@ -29,7 +29,7 @@ export default function ScoreButtons({
     try {
       const newScore = Math.max(0, currentScore + points)
       await updateGame(gameId, controlToken, { [scoreField]: newScore })
-      await addGameEvent(gameId, {
+      await addGameEvent(gameId, controlToken, {
         type: 'score',
         team,
         value: points,

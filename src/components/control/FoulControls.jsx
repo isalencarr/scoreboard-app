@@ -30,7 +30,7 @@ export default function FoulControls({
     try {
       const newFouls = Math.max(0, currentFouls + delta)
       await updateGame(gameId, controlToken, { [foulsField]: newFouls })
-      await addGameEvent(gameId, {
+      await addGameEvent(gameId, controlToken, {
         type: 'foul',
         team,
         value: delta,
