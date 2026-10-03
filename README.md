@@ -55,15 +55,24 @@ controláveis por quem tem o token, mas não aparecem em "Meus jogos".
 
 ## Rotas
 
-| Rota                       | Acesso          | Descrição                      |
-| -------------------------- | --------------- | ------------------------------ |
-| `/`                        | público         | Início e jogos recentes        |
-| `/login`                   | público         | Envio do link de acesso        |
-| `/auth/callback`           | público         | Retorno do link mágico         |
-| `/scoreboard/new`          | requer login    | Criação de jogo                |
-| `/scoreboard/:id`          | público         | Placar para transmissão        |
-| `/scoreboard/:id/control`  | token na URL    | Painel do operador             |
-| `/history`                 | público         | Jogos finalizados              |
+| Rota                      | Acesso                 | Descrição                           |
+| ------------------------- | ---------------------- | ----------------------------------- |
+| `/`                       | público                | Página inicial                      |
+| `/login`                  | público                | Envio do link de acesso             |
+| `/auth/callback`          | público                | Retorno do link mágico              |
+| `/admin`                  | requer login           | Meus jogos, com filtro por status   |
+| `/admin/games/:id`        | requer login (dono)    | Placar ao vivo, atalhos e histórico |
+| `/history`                | requer login           | Meus jogos finalizados              |
+| `/scoreboard/new`         | requer login           | Criação de jogo                     |
+| `/scoreboard/:id`         | público                | Placar para transmissão             |
+| `/scoreboard/:id/control` | token na URL, ou dono  | Painel do operador                  |
+
+Depois do login o usuário cai em `/admin`. A página de um jogo reúne o que o
+dono precisa: placar atualizado em tempo real, link e QR code do controle,
+link do placar público e o log de eventos agrupado por dia.
+
+O operador do placar não precisa de conta — basta o link de controle, que o
+dono copia ou compartilha por QR code em `/admin/games/:id`.
 
 ## Scripts
 

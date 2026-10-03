@@ -1,33 +1,18 @@
 import { Link } from 'react-router-dom'
-import Button from '../components/ui/Button'
+import AdminShell from '../components/admin/AdminShell'
+import { formatScoreline } from '../lib/gameEvents'
 import { useMyGames } from '../hooks/useMyGames'
 
 export default function HistoryPage() {
-  const { games, loading, error, signedIn, initializing } = useMyGames({
-    finishedOnly: true,
-  })
+  const { games, loading, error } = useMyGames({ finishedOnly: true })
 
   return (
-    <div className="mx-auto min-h-screen max-w-2xl p-6">
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-foreground">Histórico</h1>
-        <Link to="/">
-          <Button variant="secondary">Voltar</Button>
-        </Link>
-      </div>
-
-      {!initializing && !signedIn && (
-        <p className="text-foreground-muted">
-          <Link
-            to="/login?next=%2Fhistory"
-            className="text-accent hover:text-accent-hover"
-          >
-            Entre
-          </Link>{' '}
-          para ver seu histórico de jogos.
-        </p>
-      )}
-
+    <AdminShell
+      title="Histórico"
+      subtitle="Seus jogos finalizados, do mais recente para o mais antigo."
+      backTo="/admin"
+      backLabel="Meus jogos"
+    >
       {loading && <p className="text-foreground-muted">Carregando...</p>}
 
       {error && (
@@ -36,34 +21,33 @@ export default function HistoryPage() {
         </p>
       )}
 
-      {signedIn && !loading && !error && games.length === 0 && (
+      {!loading && !error && games.length === 0 && (
         <p className="text-foreground-muted">Nenhum jogo finalizado ainda.</p>
       )}
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         {games.map((game) => (
           <Link
             key={game.id}
-            to={`/scoreboard/${game.id}`}
-            className="flex flex-col gap-2 rounded-lg border border-border bg-surface p-4 transition-colors hover:bg-surface-hover"
+            to={`/admin/games/${game.id}`}
+            className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-surface p-4 transition-colors hover:bg-surface-hover"
           >
-            <div className="flex items-center justify-between">
-              <span className="font-semibold text-foreground">
-                {game.home_team_name} {game.final_home_score} x{' '}
-                {game.final_away_score} {game.away_team_name}
+            <div className="min-w-0">
+              <span className="truncate font-semibold text-foreground">
+                {game.home_team_name} x {game.away_team_name}
               </span>
-              <span className="text-sm text-foreground-muted">
+              <p className="mt-1 text-xs text-foreground-subtle">
                 {game.finished_at
-                  ? new Date(game.finished_at).toLocaleDateString('pt-BR')
+                  ? new Date(game.finished_at).toLocaleString('pt-BR')
                   : '-'}
-              </span>
+              </p>
             </div>
-            <div className="text-xs text-foreground-subtle">
-              Clique para ver o placar final
-            </div>
+            <span className="text-xl font-bold tabular-nums text-foreground">
+              {formatScoreline(game)}
+            </span>
           </Link>
         ))}
       </div>
-    </div>
+    </AdminShell>
   )
 }

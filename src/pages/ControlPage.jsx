@@ -62,7 +62,8 @@ export default function ControlPage() {
     try {
       await finishGame(id, token)
       setShowFinishModal(false)
-      window.location.href = '/history'
+      // O operador pode não ter conta, então o destino é o placar público.
+      window.location.href = `/scoreboard/${id}`
     } catch (err) {
       console.error('Erro ao finalizar jogo:', err)
       addToast('Erro ao finalizar jogo. Verifique o token de controle.')

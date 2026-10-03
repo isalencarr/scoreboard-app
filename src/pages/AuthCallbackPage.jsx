@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import Button from '../components/ui/Button'
 import { useAuth } from '../hooks/useAuth'
 
-const DEFAULT_REDIRECT = '/'
+const DEFAULT_REDIRECT = '/admin'
 const TIMEOUT_MS = 15000
 
 /**

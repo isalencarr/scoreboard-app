@@ -3,6 +3,8 @@ import './index.css'
 import { AuthProvider } from './contexts/AuthProvider'
 import { ToastProvider } from './contexts/ToastProvider'
 import RequireAuth from './components/auth/RequireAuth'
+import AdminGamePage from './pages/admin/AdminGamePage'
+import AdminGamesPage from './pages/admin/AdminGamesPage'
 import AuthCallbackPage from './pages/AuthCallbackPage'
 import ControlPage from './pages/ControlPage'
 import CreateGamePage from './pages/CreateGamePage'
@@ -21,15 +23,17 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
-            {/* Criar jogo exige conta: o jogo passa a ter um dono. */}
+            {/* Área administrativa: só o dono dos jogos. */}
             <Route element={<RequireAuth />}>
+              <Route path="/admin" element={<AdminGamesPage />} />
+              <Route path="/admin/games/:id" element={<AdminGamePage />} />
               <Route path="/scoreboard/new" element={<CreateGamePage />} />
+              <Route path="/history" element={<HistoryPage />} />
             </Route>
 
             {/* Placar e controle seguem públicos: a URL/token é o segredo. */}
             <Route path="/scoreboard/:id" element={<ScoreboardPage />} />
             <Route path="/scoreboard/:id/control" element={<ControlPage />} />
-            <Route path="/history" element={<HistoryPage />} />
           </Routes>
         </AuthProvider>
       </Router>

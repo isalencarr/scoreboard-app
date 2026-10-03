@@ -6,7 +6,7 @@ import Input from '../components/ui/Input'
 import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../hooks/useToast'
 
-const DEFAULT_REDIRECT = '/'
+const DEFAULT_REDIRECT = '/admin'
 
 export default function LoginPage() {
   const [searchParams] = useSearchParams()
