@@ -18,6 +18,7 @@ export default function CreateGamePage() {
     periodDuration: 10,
     overtimeDuration: 5,
     totalPeriods: 4,
+    bonusFoulLimit: 5,
   })
 
   async function handleSubmit(event) {
@@ -33,6 +34,7 @@ export default function CreateGamePage() {
         periodDurationMinutes: Number(form.periodDuration),
         overtimeDurationMinutes: Number(form.overtimeDuration),
         totalPeriods: Number(form.totalPeriods),
+        bonusFoulLimit: Number(form.bonusFoulLimit),
       })
 
       navigate(`/scoreboard/${id}/control?token=${controlToken}`)
@@ -119,22 +121,44 @@ export default function CreateGamePage() {
             />
           </div>
         </div>
-        <div>
-          <label className="mb-2 block text-sm text-foreground-muted">
-            Quantidade de períodos
-          </label>
-          <Input
-            type="number"
-            min={1}
-            max={4}
-            value={form.totalPeriods}
-            onChange={(e) =>
-              setForm((prev) => ({
-                ...prev,
-                totalPeriods: Number(e.target.value),
-              }))
-            }
-          />
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="mb-2 block text-sm text-foreground-muted">
+              Quantidade de períodos
+            </label>
+            <Input
+              type="number"
+              min={1}
+              max={4}
+              value={form.totalPeriods}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  totalPeriods: Number(e.target.value),
+                }))
+              }
+            />
+          </div>
+          <div>
+            <label className="mb-2 block text-sm text-foreground-muted">
+              Faltas para bônus
+            </label>
+            <Input
+              type="number"
+              min={1}
+              max={20}
+              value={form.bonusFoulLimit}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  bonusFoulLimit: Number(e.target.value),
+                }))
+              }
+            />
+            <p className="mt-1 text-xs text-foreground-subtle">
+              FIBA: 5. As faltas zeram a cada quarto e seguem no OT.
+            </p>
+          </div>
         </div>
 
 

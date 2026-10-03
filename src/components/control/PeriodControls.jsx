@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 import { useToast } from '../../hooks/useToast'
 import { addGameEvent, updateGame } from '../../hooks/useGameActions'
+import { shouldResetFouls } from '../../lib/gameRules'
 import Button from '../ui/Button'
 
 /**
@@ -46,14 +47,23 @@ export default function PeriodControls({ gameId, controlToken, game }) {
     try {
       const newPeriod = game.period + 1
       const isNowOvertime = newPeriod > maxPeriods
+      // FIBA: faltas coletivas zeram a cada quarto, mas a prorrogação
+      // estende o 4º quarto, então entrar no OT mantém a contagem.
+      const resetFouls = shouldResetFouls({
+        fromPeriod: game.period,
+        toPeriod: newPeriod,
+        totalPeriods: maxPeriods,
+      })
+
       await updateGame(gameId, controlToken, {
         period: newPeriod,
         is_overtime: isNowOvertime,
+        ...(resetFouls ? { home_fouls: 0, away_fouls: 0 } : {}),
       })
       await addGameEvent(gameId, controlToken, {
         type: 'period_change',
         value: newPeriod,
-        payload: { direction: 'next' },
+        payload: { direction: 'next', fouls_reset: resetFouls },
       })
     } catch (err) {
       console.error('Erro ao mudar período:', err)

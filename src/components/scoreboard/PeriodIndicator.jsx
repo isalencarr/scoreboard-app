@@ -1,7 +1,18 @@
+import { formatPeriod } from '../../lib/gameRules'
+
 /**
- * @param {{ period: number, isOvertime?: boolean }} props
+ * `Q1`..`Q4` na regulamentação; `OT1`, `OT2`... nas prorrogações.
+ *
+ * @param {{ period: number, isOvertime?: boolean, totalPeriods?: number }} props
  */
-export default function PeriodIndicator({ period, isOvertime = false }) {
-  const label = isOvertime ? 'OT' : `Q${period}`
-  return <span className="bowlby-one">{label}</span>
+export default function PeriodIndicator({
+  period,
+  isOvertime = false,
+  totalPeriods = 4,
+}) {
+  return (
+    <span className="bowlby-one">
+      {formatPeriod({ period, isOvertime, totalPeriods })}
+    </span>
+  )
 }

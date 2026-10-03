@@ -30,6 +30,7 @@
  * @property {number} period_duration_seconds
  * @property {number} overtime_duration_seconds
  * @property {number} total_periods
+ * @property {number} bonus_foul_limit
  * @property {string | null} user_id
  * @property {number} [final_home_score]
  * @property {number} [final_away_score]

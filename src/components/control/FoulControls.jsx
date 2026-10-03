@@ -2,6 +2,7 @@ import { Minus, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useToast } from '../../hooks/useToast'
 import { addGameEvent, updateGame } from '../../hooks/useGameActions'
+import { bonusFoulLimit } from '../../lib/gameRules'
 import Button from '../ui/Button'
 
 /**
@@ -10,6 +11,7 @@ import Button from '../ui/Button'
  *   team: 'home' | 'away'
  *   controlToken: string | null
  *   currentFouls: number
+ *   game: import('../../types/game').Game
  * }} props
  */
 export default function FoulControls({
@@ -17,12 +19,15 @@ export default function FoulControls({
   team,
   controlToken,
   currentFouls,
+  game,
 }) {
   const [busy, setBusy] = useState(false)
   const { addToast } = useToast()
   const foulsField = team === 'home' ? 'home_fouls' : 'away_fouls'
   const label = team === 'home' ? 'Faltas Casa' : 'Faltas Visitante'
   const disabled = !controlToken || busy
+  const limit = bonusFoulLimit(game)
+  const inBonus = currentFouls >= limit
 
   async function changeFouls(delta) {
     if (!controlToken || busy) return
@@ -46,7 +51,12 @@ export default function FoulControls({
 
   return (
     <div className="flex items-center justify-between gap-3 rounded-lg border border-border bg-surface p-4">
-      <span className="text-sm text-foreground-muted">{label}</span>
+      <div className="flex flex-col">
+        <span className="text-sm text-foreground-muted">{label}</span>
+        <span className="text-xs text-foreground-subtle">
+          bônus a partir de {limit}
+        </span>
+      </div>
       <div className="flex items-center gap-2">
         <Button
           variant="ghost"
@@ -57,7 +67,16 @@ export default function FoulControls({
         >
           <Minus size={20} />
         </Button>
-        <span className="min-w-[1.5ch] text-center text-xl font-bold">
+        {inBonus && (
+          <span className="rounded bg-danger/20 px-2 py-0.5 text-xs font-bold text-danger">
+            BÔNUS
+          </span>
+        )}
+        <span
+          className={`min-w-[1.5ch] text-center text-xl font-bold ${
+            inBonus ? 'text-danger' : ''
+          }`}
+        >
           {currentFouls}
         </span>
         <Button

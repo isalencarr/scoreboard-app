@@ -13,6 +13,7 @@ import TeamColorControls from '../components/control/TeamColorControls'
 import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../hooks/useToast'
 import { useGame } from '../hooks/useGame'
+import { periodLabel as formatPeriodLabel } from '../lib/gameRules'
 import { fetchGameControlToken, finishGame } from '../hooks/useGameActions'
 
 export default function ControlPage() {
@@ -89,7 +90,7 @@ export default function ControlPage() {
     )
   }
 
-  const periodLabel = game.is_overtime ? 'OT' : `Q${game.period}`
+  const periodLabel = formatPeriodLabel(game)
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -148,6 +149,7 @@ export default function ControlPage() {
             team="home"
             controlToken={token}
             currentFouls={game.home_fouls}
+            game={game}
           />
           <TeamColorControls
             gameId={game.id}
@@ -189,6 +191,7 @@ export default function ControlPage() {
             team="away"
             controlToken={token}
             currentFouls={game.away_fouls}
+            game={game}
           />
           <TeamColorControls
             gameId={game.id}

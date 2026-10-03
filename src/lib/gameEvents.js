@@ -1,4 +1,5 @@
 import { formatClock } from './clock'
+import { periodLabel } from './gameRules'
 
 /**
  * @param {import('../types/game').TeamSide | null | undefined} team
@@ -50,10 +51,13 @@ export function describeGameEvent(event, game) {
     }
     case 'period_change': {
       const direction = payload.direction === 'previous' ? 'voltou' : 'avançou'
-      return `Período ${direction} para ${event.value ?? '?'}`
+      const reset = payload.fouls_reset ? ' — faltas zeradas' : ''
+      return `Período ${direction} para ${event.value ?? '?'}${reset}`
     }
     case 'overtime_start':
-      return 'Início da prorrogação'
+      return event.value
+        ? `Início da prorrogação (período ${event.value})`
+        : 'Início da prorrogação'
     case 'clock_start':
       return 'Cronômetro iniciado'
     case 'clock_stop':
@@ -122,7 +126,7 @@ export function formatScoreline(game) {
  * @returns {string}
  */
 export function formatPeriodLabel(game) {
-  return game.is_overtime ? 'OT' : `Q${game.period}`
+  return periodLabel(game)
 }
 
 /**

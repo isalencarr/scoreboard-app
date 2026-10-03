@@ -1,3 +1,4 @@
+import { isTeamInBonus } from '../../lib/gameRules'
 import GameClock from './GameClock'
 import TeamScore from './TeamScore'
 
@@ -14,6 +15,7 @@ export default function ScoreboardLayout({ game }) {
           fouls={game.home_fouls}
           variant="home"
           color={game.home_team_color}
+          inBonus={isTeamInBonus(game, 'home')}
         />
       </div>
       <div className="flex-[38]">
@@ -23,6 +25,7 @@ export default function ScoreboardLayout({ game }) {
           fouls={game.away_fouls}
           variant="away"
           color={game.away_team_color}
+          inBonus={isTeamInBonus(game, 'away')}
         />
       </div>
       <div className="flex-[24]">
@@ -32,6 +35,7 @@ export default function ScoreboardLayout({ game }) {
           updatedAt={game.clock_updated_at}
           period={game.period}
           isOvertime={game.is_overtime}
+          totalPeriods={game.total_periods}
         />
       </div>
     </div>

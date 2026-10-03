@@ -9,6 +9,7 @@ import { supabase } from '../lib/supabase'
  * @property {number} periodDurationMinutes
  * @property {number} overtimeDurationMinutes
  * @property {number} totalPeriods
+ * @property {number} [bonusFoulLimit]
  */
 
 /**
@@ -37,6 +38,7 @@ export async function createGame(input) {
       period_duration_seconds: input.periodDurationMinutes * 60,
       overtime_duration_seconds: input.overtimeDurationMinutes * 60,
       total_periods: input.totalPeriods,
+      bonus_foul_limit: input.bonusFoulLimit,
       clock_seconds: input.periodDurationMinutes * 60,
     })
     .select('id')
